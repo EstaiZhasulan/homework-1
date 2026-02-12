@@ -1,30 +1,54 @@
 package com.narxoz.rpg.character;
 
-/**
- * Base interface for all character types in the RPG system.
- *
- * TODO: Decide if this should be an interface or abstract class
- * Think: What's common to ALL characters?
- * Think: What varies between character types?
- *
- * Factory Method Pattern:
- * This represents the "Product" in the Factory Method pattern.
- * Different character classes (Warrior, Mage, Archer) are concrete products.
- */
-public interface Character {
+public abstract class Character {
+    protected String name;
+    protected int health;
+    protected int attack;
+    protected int defense;
+    protected String specialAbility;
+    protected Weapon weapon;
+    protected Armor armor;
 
-    // TODO: Define common character behaviors
-    // Consider methods like:
-    // - String getName()
-    // - int getHealth()
-    // - int getMana()
-    // - int getStrength()
-    // - int getIntelligence()
-    // - void displayStats()
-    // - void useSpecialAbility()
+    public Character(String name, int health, int attack, int defense, String specialAbility) {
+        this.name = name;
+        this.health = health;
+        this.attack = attack;
+        this.defense = defense;
+        this.specialAbility = specialAbility;
+    }
 
-    // TODO: Think about equipment
-    // Should characters know about their equipped items?
-    // How will you handle equipping weapons and armor?
+    // Equip a weapon
+    public void equipWeapon(Weapon weapon) {
+        this.weapon = weapon;
+        System.out.println(name + " equipped " + weapon.getName());
+    }
 
+    // Equip an armor piece
+    public void equipArmor(Armor armor) {
+        this.armor = armor;
+        System.out.println(name + " equipped " + armor.getName());
+    }
+
+    // Use special ability
+    public void useSpecialAbility() {
+        System.out.println(name + " uses " + specialAbility + "!");
+    }
+
+    // Display character stats and equipped items
+    public void displayStats() {
+        System.out.println("\n=== " + name + " Stats ===");
+        System.out.println("Health: " + health);
+        int totalAttack = attack + (weapon != null ? weapon.getAttackPower() : 0);
+        System.out.println("Attack: " + totalAttack +
+                " (Base " + attack +
+                " + " + (weapon != null ? weapon.getAttackPower() : 0) +
+                " from weapon)");
+        int totalDefense = defense + (armor != null ? armor.getDefensePower() : 0);
+        System.out.println("Defense: " + totalDefense +
+                " (Base " + defense +
+                " + " + (armor != null ? armor.getDefensePower() : 0) +
+                " from armor)");
+        System.out.println("Special Ability: " + specialAbility);
+    }
 }
+
