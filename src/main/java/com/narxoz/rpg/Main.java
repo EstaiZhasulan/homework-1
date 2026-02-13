@@ -1,65 +1,90 @@
 package com.narxoz.rpg;
 
-/**
- * Main demonstration class for the RPG Character & Equipment System.
- *
- * Your task: Demonstrate both Factory Method and Abstract Factory patterns working together.
- *
- * This file should showcase:
- * 1. Creating different character types using Factory Method pattern
- * 2. Equipping characters with themed equipment using Abstract Factory pattern
- * 3. Displaying character stats and equipment details
- *
- * Expected output flow:
- * - Create 3+ different characters
- * - Equip each with different themed equipment sets
- * - Show that the system is extensible and maintainable
- */
+import com.narxoz.rpg.character.Character;
+import com.narxoz.rpg.factory.*;
+import com.narxoz.rpg.equipment.*;
+
+import java.util.Scanner;
+
 public class Main {
+
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         System.out.println("=== RPG Character & Equipment System ===\n");
 
-        // TODO: Demonstrate Factory Method Pattern
-        // Create different character types (Warrior, Mage, Archer, etc.)
-        // Think: How can you create characters without using if-else chains?
-        // Think: What class/interface should handle character creation?
+        System.out.println("Choose your character type:");
+        System.out.println("1 - Warrior");
+        System.out.println("2 - Mage");
+        System.out.println("3 - Archer");
+        System.out.print("Enter choice (1-3): ");
 
+        int charChoice = readInt(scanner, 1, 3);
+        scanner.nextLine();
 
-        // TODO: Demonstrate Abstract Factory Pattern
-        // Create equipment sets (Medieval, Magic, Ranger, etc.)
-        // Think: How do you ensure weapons and armor from same theme are created together?
-        // Think: What guarantees a Medieval sword comes with Medieval armor?
+        System.out.print("Enter character name: ");
+        String name = scanner.nextLine().trim();
+        if (name.isEmpty()) {
+            name = switch (charChoice) {
+                case 1 -> "Warrior";
+                case 2 -> "Mage";
+                default -> "Archer";
+            };
+        }
 
+        CharacterFactory characterFactory;
+        switch (charChoice) {
+            case 1 -> characterFactory = new WarriorFactory();
+            case 2 -> characterFactory = new MageFactory();
+            default -> characterFactory = new ArcherFactory();
+        }
 
-        // TODO: Show character stats
-        // Display each character's attributes (health, mana, strength, intelligence)
-        // Show their special abilities
+        Character character = characterFactory.createCharacter(name);
 
+        System.out.println("\nChoose equipment theme:");
+        System.out.println("1 - Medieval");
+        System.out.println("2 - Magic");
+        System.out.println("3 - Ranger");
+        System.out.print("Enter choice (1-3): ");
 
-        // TODO: Equip characters with different themed sets
-        // Warrior with Medieval equipment
-        // Mage with Magic equipment
-        // Archer with Ranger equipment
-        // etc.
+        int equipChoice = readInt(scanner, 1, 3);
+        scanner.nextLine();
 
+        EquipmentFactory equipmentFactory;
+        switch (equipChoice) {
+            case 1 -> equipmentFactory = new MedievalEquipmentFactory();
+            case 2 -> equipmentFactory = new MagicEquipmentFactory();
+            default -> equipmentFactory = new RangerEquipmentFactory();
+        }
 
-        // TODO: Display equipped items
-        // Show weapon details (damage, special properties)
-        // Show armor details (defense, special properties)
+        Weapon weapon = equipmentFactory.createWeapon();
+        Armor armor = equipmentFactory.createArmor();
 
+        character.equipWeapon(weapon);
+        character.equipArmor(armor);
 
-        // TODO: (Optional) Demonstrate extensibility
-        // In comments, explain how easy it would be to:
-        // - Add a new character class (e.g., Rogue, Paladin)
-        // - Add a new equipment theme (e.g., Dragon Slayer, Undead)
+        System.out.println("\n--- Character summary ---");
+        character.displayStats();
+        character.useSpecialAbility();
 
-
-        System.out.println("\n=== Demo Complete ===");
+        System.out.println("\nThank you for playing :)");
+        scanner.close();
     }
 
-    // TODO: Add helper methods as needed
-    // Consider methods like:
-    // - createAndDisplayCharacter(...)
-    // - equipCharacter(...)
-    // - displayCharacterInfo(...)
+
+    private static int readInt(Scanner scanner, int min, int max) {
+        while (true) {
+            if (!scanner.hasNextInt()) {
+                System.out.print("Invalid input. Enter a number: ");
+                scanner.next();
+                continue;
+            }
+            int v = scanner.nextInt();
+            if (v < min || v > max) {
+                System.out.print("Choice out of range. Enter (" + min + "-" + max + "): ");
+                continue;
+            }
+            return v;
+        }
+    }
 }

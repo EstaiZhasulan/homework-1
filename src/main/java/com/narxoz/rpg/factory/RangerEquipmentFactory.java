@@ -1,4 +1,16 @@
 package com.narxoz.rpg.factory;
 
-public class RangerEquipmentFactory {
+import com.narxoz.rpg.equipment.*;
+
+public class RangerEquipmentFactory implements EquipmentFactory {
+
+    @Override
+    public Weapon createWeapon() {
+        return new Longbow();
+    }
+
+    @Override
+    public Armor createArmor() {
+        return new LeatherArmor();
+    }
 }

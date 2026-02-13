@@ -1,4 +1,16 @@
 package com.narxoz.rpg.factory;
 
-public class MagicEquipmentFactory {
+import com.narxoz.rpg.equipment.*;
+
+public class MagicEquipmentFactory implements EquipmentFactory {
+
+    @Override
+    public Weapon createWeapon() {
+        return new WizardStaff();
+    }
+
+    @Override
+    public Armor createArmor() {
+        return new EnchantedRobes();
+    }
 }
