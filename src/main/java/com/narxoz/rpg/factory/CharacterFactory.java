@@ -1,4 +1,4 @@
-package com.narxoz.rpg.character;
+package com.narxoz.rpg.factory;
 
 public class CharacterFactory {
 }
